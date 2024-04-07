@@ -2,10 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MyGui extends JFrame {
     private JButton liveButton, emptyButton, reload, phone;
     private JTextField[] textFields = new JTextField[3];
+    private ArrayList<JTextField> phoneFields = new ArrayList<JTextField>();
     private JTextField inputField1, inputField2;
     private JTextField phoneInputNumber = new JTextField();
     private JTextField phoneInputType = new JTextField();
@@ -142,11 +144,16 @@ public class MyGui extends JFrame {
         textFields[1].setText("Live: " + liveBucks);
         textFields[2].setText("Empty: " + emptyBucks);
         newChances();
+        phoneFields.forEach(this::remove);
+        phoneFields = new ArrayList<JTextField>();
+        revalidate();
+        repaint();
     }
 
     private void phone() {
         JTextField newPhone = new JTextField("Round: " + phoneInputNumber.getText() + " " + phoneInputType.getText());
         newPhone.setEditable(false);
+        phoneFields.add(newPhone);
         add(newPhone);
         revalidate();
         repaint();
