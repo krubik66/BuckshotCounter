@@ -12,6 +12,7 @@ public class MyGui extends JFrame {
     private JTextField phoneInputNumber = new JTextField();
     private JTextField phoneInputType = new JTextField();
     private JTextField liveChances = new JTextField();
+    private JTextField empty = new JTextField();
 
     public static int liveBucks = 0;
     public static int emptyBucks = 0;
@@ -96,8 +97,8 @@ public class MyGui extends JFrame {
         reload.setSize(300, 50);
         add(reload);
 
-        JTextField empty = new JTextField();
         empty.setEditable(false);
+        empty.setText("Current shot: " + currentRound);
         add(empty);
 
         add(phoneInfoNumber);
@@ -165,6 +166,7 @@ public class MyGui extends JFrame {
 
     private void newChances() {
         textFields[0].setText("All: " + allBucks);
+        empty.setText("Current shot: " + currentRound);
         liveChances.setText("Live chances: " + String.format("%.1f", (Double.parseDouble("" + liveBucks) / allBucks * 100)) + "%");
     }
 }
