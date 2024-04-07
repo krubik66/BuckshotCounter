@@ -26,7 +26,7 @@ public class MyGui extends JFrame {
 
         // Create buttons
         liveButton = new JButton("Live");
-        emptyButton = new JButton("Empty");
+        emptyButton = new JButton("Blank");
         reload = new JButton("Reload");
         phone = new JButton("Phone");
         liveButton.addActionListener(new ActionListener() {
@@ -69,7 +69,7 @@ public class MyGui extends JFrame {
 
         textFields[0].setText("All: " + allBucks);
         textFields[1].setText("Live: " + liveBucks);
-        textFields[2].setText("Empty: " + emptyBucks);
+        textFields[2].setText("Blank: " + emptyBucks);
 
         // Create input fields
         JTextField infoField1 = new JTextField("All:");
@@ -131,7 +131,7 @@ public class MyGui extends JFrame {
         currentRound++;
         emptyBucks--;
         allBucks--;
-        textFields[2].setText("Empty: " + emptyBucks);
+        textFields[2].setText("Blank: " + emptyBucks);
         newChances();
     }
 
@@ -142,7 +142,11 @@ public class MyGui extends JFrame {
         emptyBucks = allBucks - liveBucks;
         textFields[0].setText("All: " + allBucks);
         textFields[1].setText("Live: " + liveBucks);
-        textFields[2].setText("Empty: " + emptyBucks);
+        textFields[2].setText("Blank: " + emptyBucks);
+        inputField1.setText("");
+        inputField2.setText("");
+        phoneInputType.setText("");
+        phoneInputNumber.setText("");
         newChances();
         phoneFields.forEach(this::remove);
         phoneFields = new ArrayList<JTextField>();
