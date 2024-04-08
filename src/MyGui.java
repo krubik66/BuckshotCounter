@@ -173,6 +173,7 @@ public class MyGui extends JFrame {
         newChances();
         phoneFields.forEach(this::remove);
         phoneFields = new ArrayList<JTextField>();
+        phoneRecords = new ArrayList<PhoneRecord>();
         revalidate();
         repaint();
     }
