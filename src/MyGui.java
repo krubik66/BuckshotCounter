@@ -8,22 +8,25 @@ public class MyGui extends JFrame {
     private JButton liveButton, emptyButton, reload, phone;
     private JTextField[] textFields = new JTextField[3];
     private ArrayList<JTextField> phoneFields = new ArrayList<JTextField>();
+    private ArrayList<PhoneRecord> phoneRecords = new ArrayList<PhoneRecord>();
     private JTextField inputField1, inputField2;
     private JTextField phoneInputNumber = new JTextField();
     private JTextField phoneInputType = new JTextField();
     private JTextField liveChances = new JTextField();
     private JTextField empty = new JTextField();
+    private ButtonGroup phoneTypeButtons = new ButtonGroup();
 
     public static int liveBucks = 0;
     public static int emptyBucks = 0;
     public static int allBucks = 0;
     public static int currentRound = 1;
+    private static boolean currentChoosenPhoneType = false;
 
     public MyGui() {
         setTitle("BuckshotCounter");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(300, 600);
-        setLayout(new GridLayout(10, 3, 10, 10)); // Adjust layout as needed
+        setLayout(new GridLayout(15, 2, 10, 10)); // Adjust layout as needed
 
         // Create buttons
         liveButton = new JButton("Live");
@@ -104,7 +107,28 @@ public class MyGui extends JFrame {
         add(phoneInfoNumber);
         add(phoneInputNumber);
         add(phoneInfoType);
-        add(phoneInputType);
+        JRadioButton option1 = new JRadioButton("Live");
+        JRadioButton option2 = new JRadioButton("Blank");
+
+        // Group the radio buttons
+
+        phoneTypeButtons.add(option1);
+        phoneTypeButtons.add(option2);
+
+        // Add action listener to radio buttons
+        ActionListener radioListener = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JRadioButton selectedRadioButton = (JRadioButton) e.getSource();
+                currentChoosenPhoneType = (selectedRadioButton == option1);
+            }
+        };
+        option1.addActionListener(radioListener);
+        option2.addActionListener(radioListener);
+        JPanel phoneTypePanel = new JPanel(new GridLayout(2, 1));
+        phoneTypePanel.add(option1);
+        phoneTypePanel.add(option2);
+        add(phoneTypePanel);
         add(phone);
 
         setVisible(true);
@@ -154,8 +178,25 @@ public class MyGui extends JFrame {
     }
 
     private void phone() {
-        JTextField newPhone = new JTextField("Round: " + phoneInputNumber.getText() + " " + phoneInputType.getText());
+        String currentBullet = "Blank";
+        if(currentChoosenPhoneType) {
+            currentBullet = "Live";
+        }
+        JTextField newPhone = new JTextField("Round: " + phoneInputNumber.getText() + " " + currentBullet);
         newPhone.setEditable(false);
+        phoneRecords.add(new PhoneRecord(Integer.parseInt(phoneInputNumber.getText()), currentChoosenPhoneType));
+        if(currentChoosenPhoneType) {
+            liveBucks--;
+            allBucks--;
+            textFields[1].setText("Live: " + liveBucks);
+            newChances();
+        }
+        else {
+            emptyBucks--;
+            allBucks--;
+            textFields[2].setText("Blank: " + emptyBucks);
+            newChances();
+        }
         phoneFields.add(newPhone);
         add(newPhone);
         phoneInputType.setText("");
@@ -165,8 +206,27 @@ public class MyGui extends JFrame {
     }
 
     private void newChances() {
+        phoneRecords.forEach(record -> {
+            if(record.round == currentRound) {
+                String currentBullet = "Blank";
+                if(record.isLive) {
+                    currentBullet = "Live";
+                }
+                JOptionPane.showMessageDialog(MyGui.this, "Current bullet: " + currentBullet);
+                currentRound++;
+            }
+        });
         textFields[0].setText("All: " + allBucks);
         empty.setText("Current shot: " + currentRound);
         liveChances.setText("Live chances: " + String.format("%.1f", (Double.parseDouble("" + liveBucks) / allBucks * 100)) + "%");
+    }
+
+    private class PhoneRecord {
+        public int round;
+        public boolean isLive;
+        public PhoneRecord(int round, boolean isLive) {
+            this.round = round;
+            this.isLive = isLive;
+        }
     }
 }
